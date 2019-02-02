@@ -1,0 +1,52 @@
+name: release
+description: releases the op
+inputs:
+  githubUsername:
+    string:
+      constraints: { minLength: 1 }
+      description: user for logging in to github
+  githubPassword:
+    string:
+      constraints: { minLength: 1 }
+      description: password for logging in to github
+      isSecret: true
+  srcDir:
+    dir:
+      default: .
+outputs:
+  srcDir:
+    dir: {}
+opspec: 0.1.6
+run:
+  serial:
+    - op:
+        ref: build
+        inputs:
+          srcDir:
+        outputs:
+          srcDir:
+    - op:
+        ref: github.com/opspec-pkgs/yaml.parse#1.0.0
+        inputs: { yaml: $(srcDir/op.yml) }
+        outputs: { opDotYml: result }
+    - op:
+        ref: github.com/opspec-pkgs/git.repo.resolve-commit#1.0.2
+        inputs: { dotGitDir: $(srcDir/.git) }
+        outputs: { commit: }
+    - container:
+        image: { ref: 'alpine:3.6' }
+        cmd: [sh, -ce, 'echo -n ${opName#*/*/}  > /opRepo']
+        envVars:
+          opName: $(opDotYml.name)
+        files:
+          /opRepo: $(opRepo)
+    - op:
+        ref: github.com/opspec-pkgs/github.release.create#1.1.0
+        inputs:
+          owner: opspec-pkgs
+          repo: $(opRepo)
+          loginUsername: $(githubUsername)
+          loginPassword: $(githubPassword)
+          tag: $(opDotYml.version)
+          commitish: $(commit)
+          name: $(opDotYml.version)

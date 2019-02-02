@@ -1,0 +1,56 @@
+description: decrypts ciphertext encrypted w/ a google cloud platform key management service key
+inputs:
+  ciphertextFile:
+    file:
+      description: ciphertext file to decrypt
+  key:
+    string:
+      default: ' '
+      description: cloud KMS key to use for decryption
+      isSecret: true
+  keyFile:
+    string:
+      description: key file for a GCP service account w/ `Cloud KMS CryptoKey Decrypter` or `Cloud KMS CryptoKey Encrypter/Decrypter` role
+      isSecret: true
+  keyring:
+    string:
+      default: ' '
+      description: key ring of the key
+  location:
+    string:
+      description: location of the keyring [list of locations](https://cloud.google.com/kms/docs/locations) for allowed values
+      constraints: { minLength: 1 }
+  projectId:
+    string:
+      description: id of the GCP project containing the gke cluster
+outputs:
+  plaintextFile:
+    file:
+      description: decrypted ciphertext file
+      isSecret: true
+name: github.com/opspec-pkgs/gcp.kms.decrypt
+opspec: 0.1.6
+run:
+  serial:
+    # ensure service enabled
+    - op:
+        ref: github.com/opspec-pkgs/gcp.services.enable#1.0.0
+        inputs:
+          keyFile:
+          projectId:
+          service: cloudkms.googleapis.com
+    - container:
+        image: { ref: 'google/cloud-sdk:229.0.0-alpine' }
+        files:
+          /ciphertextFile: $(ciphertextFile)
+          /cmd.sh:
+          /keyFile: $(keyFile)
+          /plaintextFile: $(plaintextFile)
+        cmd: [ /cmd.sh ]
+        envVars:
+          CLOUDSDK_CORE_PROJECT: $(projectId)
+          CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+          key:
+          keyring:
+          location:
+version: 1.0.0

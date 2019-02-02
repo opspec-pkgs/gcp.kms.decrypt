@@ -1,0 +1,21 @@
+name: build
+description: builds the op
+inputs:
+  srcDir:
+    dir:
+      default: .
+outputs:
+  srcDir:
+    dir: {}
+opspec: 0.1.6
+run:
+  serial:
+    - op:
+        ref: test
+        inputs: { srcDir }
+    - op:
+        ref: github.com/opspec-pkgs/_.op.bootstrap#2.2.0
+        inputs:
+          srcDir:
+        outputs:
+          srcDir:
