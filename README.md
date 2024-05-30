@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/opspec-pkgs/gcp.kms.decrypt.svg?branch=master)](https://travis-ci.org/opspec-pkgs/gcp.kms.decrypt)
+[![Build Status](https://github.com/opspec-pkgs/gcp.kms.decrypt/workflows/build/badge.svg?branch=main)](https://github.com/opspec-pkgs/gcp.kms.decrypt/actions?query=workflow%3Abuild+branch%3Amain)
 
 <img src="icon.svg" alt="icon" height="100px">
 
@@ -6,16 +6,12 @@
 
 decrypts ciphertext encrypted w/ a google cloud platform key management service key
 
-# Format
-
-the op uses [![opspec 0.1.6](https://img.shields.io/badge/opspec-0.1.6-brightgreen.svg?colorA=6b6b6b&colorB=fc16be)](https://opspec.io/0.1.6) definition format
-
 # Example usage
 
-## Install
+## Visualize
 
 ```shell
-opctl op install github.com/opspec-pkgs/gcp.kms.decrypt#1.0.0
+opctl ui github.com/opspec-pkgs/gcp.kms.decrypt#1.0.0
 ```
 
 ## Run
@@ -30,14 +26,13 @@ opctl run github.com/opspec-pkgs/gcp.kms.decrypt#1.0.0
 op:
   ref: github.com/opspec-pkgs/gcp.kms.decrypt#1.0.0
   inputs:
-    # required
-    ciphertextFile:
-    keyFile:
-    location:
-    projectId:
-    ### optional; uncomment to override default(s)
-    # key:  
-    # keyring:  
+    ciphertextFile:  # 👈 required; provide a value
+    keyFile:  # 👈 required; provide a value
+    location:  # 👈 required; provide a value
+    projectId:  # 👈 required; provide a value
+  ## uncomment to override defaults
+  #   key: " "
+  #   keyring: " "
   outputs:
     plaintextFile:
 ```
@@ -45,7 +40,7 @@ op:
 # Support
 
 join us on
-[![Slack](https://opctl-slackin.herokuapp.com/badge.svg)](https://opctl-slackin.herokuapp.com/)
+[![Slack](https://img.shields.io/badge/slack-opctl-E01563.svg)](https://join.slack.com/t/opctl/shared_invite/zt-51zodvjn-Ul_UXfkhqYLWZPQTvNPp5w)
 or
 [open an issue](https://github.com/opspec-pkgs/gcp.kms.decrypt/issues)
 
@@ -59,4 +54,4 @@ and [tagged](https://git-scm.com/book/en/v2/Git-Basics-Tagging); see
 # Contributing
 
 see
-[project/CONTRIBUTING.md](https://github.com/opspec-pkgs/project/blob/master/CONTRIBUTING.md)
+[project/CONTRIBUTING.md](https://github.com/opspec-pkgs/project/blob/main/CONTRIBUTING.md)
